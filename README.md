@@ -135,14 +135,43 @@ npm run preview
 - [POCKETBASE_SCHEMA.md](POCKETBASE_SCHEMA.md) - Database schema
 - [DEVELOPMENT_LOG.md](DEVELOPMENT_LOG.md) - Complete development history
 
-## License
+## Research & References
 
-[Your License Here]
+This project is built on extensive research into color vision deficiency testing methodologies. See [COLOR_VISION_TESTING_RESEARCH.md](COLOR_VISION_TESTING_RESEARCH.md) for comprehensive documentation of:
+
+- Clinical testing standards (Ishihara, Farnsworth D-15, FM 100-Hue)
+- Computerized adaptive testing (CAD, CCT)
+- Research-backed simulation algorithms
+- Result visualization best practices
+
+### Reference Repositories
+
+This implementation was informed by three excellent open-source projects:
+
+1. **[jsColorblindSimulator](https://github.com/MaPePeR/jsColorblindSimulator)** by MaPePeR
+   - JavaScript implementation of Machado et al. (2009) physiologically-accurate CVD simulation
+   - Uses LMS color space transformations
+   - Supports all major CVD types with severity adjustment
+
+2. **[color-blind](https://github.com/skratchdot/color-blind)** by skratchdot
+   - npm library based on Matthew Wickline/HCIRN algorithms
+   - Used for simulation-based Bayesian priors in our adaptive testing
+   - Daltonize algorithms from mudcu.be
+
+3. **[Colblindor](https://www.color-blindness.com/)** resources
+   - Educational content on CVD types and testing methods
+   - Online testing tools and simulations
+   - Community-validated testing approaches
+
+### Key Research Papers
+
+- Machado, G.M., Oliveira, M.M., Fernandes, L.A.F. (2009). "A Physiologically-based Model for Simulation of Color Vision Deficiency"
+- Farnsworth, D. (1943). "The Farnsworth-Munsell 100-Hue and Dichotomous Tests for Color Vision"
+- Bayesian adaptive testing methodology from psychometric testing literature
+
 
 ## Credits
 
-Built with research-backed color vision science and adaptive testing algorithms.
+Developed as an open-source color vision testing framework with research-backed algorithms and adaptive testing methodologies.
 
-## Contributing
-
-[Your contribution guidelines]
+Special thanks to the developers of the reference repositories above for their pioneering work in CVD simulation and testing.

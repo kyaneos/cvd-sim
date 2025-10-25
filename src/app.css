@@ -1,160 +1,148 @@
-/* Import statements must come first */
-@import './styles/ac-sprites.css';
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+/* Framework Minimal Styling */
+/* Clean, simple design with Average font */
 
-/* Animal Crossing Default Styling */
 :root {
-	font-family: 'Nunito', 'Comic Sans MS', sans-serif;
-	line-height: 1.4;
-	font-weight: 600;
-
-	/* AC Color Palette */
-	--ac-bg: #ffffff;
-	--ac-text: #333333;
-	--ac-text-light: #666666;
-	--ac-border: #ddd;
-	--ac-accent: #4a90e2;
-	--ac-green: #4caf50;
-	--ac-orange: #ffa07a;
-	--ac-pink: #ffb6c1;
-
-	color: var(--ac-text);
-	background-color: var(--ac-bg);
-
-	/* Smooth text rendering */
-	font-synthesis: none;
-	text-rendering: optimizeLegibility;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+	/* Framework Color Palette - Minimal */
+	--fw-bg: #ffffff;
+	--fw-text: #000000;
+	--fw-text-light: #666666;
+	--fw-border: #000000;
+	--fw-accent: #333333;
+	--fw-error: #cc0000;
+	--fw-success: #28a745;
 }
 
-/* AC-style Links */
-a {
-	color: var(--ac-accent);
-	text-decoration: none;
-	font-weight: 700;
-	transition: color 0.2s ease;
-}
-a:hover {
-	color: var(--ac-green);
-}
-
-/* Clean AC Layout */
+/* Override AC styles for framework routes */
 body {
 	margin: 0;
 	padding: 0;
 	min-height: 100vh;
-	background: var(--ac-bg);
-	font-family: inherit;
+	background: var(--fw-bg);
+	font-family: 'Average', serif;
+	color: var(--fw-text);
+	line-height: 1.6;
 }
 
-/* AC-style Headings */
+* {
+	box-sizing: border-box;
+}
+
+/* Typography */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-	color: var(--ac-text);
-	font-weight: 700;
+	color: var(--fw-text);
+	font-weight: 400;
 	margin: 0.5em 0;
+	font-family: 'Average', serif;
 }
 
-h1 {
-	font-size: 2.5em;
-	line-height: 1.2;
+p {
+	margin: 1em 0;
+	line-height: 1.6;
 }
 
-/* AC-style Buttons using HUD texture */
-button {
-	/* Fallback styling - clean AC style if texture fails */
-	background-color: var(--ac-pink);
-	border: 2px solid #fff;
-	border-radius: 8px;
-	padding: 8px 16px;
-	font-size: 14px;
-	font-weight: 700;
-	font-family: inherit;
-	color: var(--ac-text);
-	cursor: pointer;
-	transition: all 0.2s ease;
-
-	/* Ensure readable text */
-	text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* Links */
+a {
+	color: var(--fw-text);
+	text-decoration: underline;
+	transition: color 0.2s ease;
 }
 
-button:hover {
-	transform: translateY(-2px);
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-	background-color: #ffb6c1;
+a:hover {
+	color: var(--fw-accent);
 }
 
-button:active {
-	transform: translateY(0);
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-/* AC-style Dialogue Boxes using text texture */
-.dialogue-box,
-.speech-bubble {
-	background-image: url('/assets/textures/text.png');
-	background-position: 0 -60px; /* Position to show white dialogue bubble */
-	background-repeat: no-repeat;
-	background-size: 256px auto;
-	min-height: 60px;
-
-	/* Fallback styling */
-	background-color: #fff;
-	border: 2px solid var(--ac-border);
-	border-radius: 12px;
-
-	padding: 15px 20px;
-	color: var(--ac-text);
-	font-weight: 600;
-	line-height: 1.4;
-	position: relative;
-}
-
-/* AC-style Input Fields */
+/* Forms */
 input,
 textarea,
 select {
-	background: #fff;
-	border: 2px solid var(--ac-border);
-	border-radius: 6px;
-	padding: 8px 12px;
-	font-family: inherit;
-	font-size: 14px;
-	font-weight: 600;
-	color: var(--ac-text);
-	transition: border-color 0.2s ease;
+	font-family: 'Average', serif;
+	font-size: 16px;
+	padding: 12px;
+	border: 2px solid var(--fw-border);
+	border-radius: 4px;
+	background: var(--fw-bg);
+	color: var(--fw-text);
 }
 
 input:focus,
 textarea:focus,
 select:focus {
 	outline: none;
-	border-color: var(--ac-accent);
-	box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+	border-color: var(--fw-accent);
+	box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
 }
 
-/* AC-style Cards */
-.card {
-	background: #fff;
-	border: 2px solid var(--ac-border);
-	border-radius: 12px;
-	padding: 20px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-	transition: box-shadow 0.2s ease;
+/* Buttons */
+button {
+	font-family: 'Average', serif;
+	font-size: 16px;
+	padding: 12px 24px;
+	background: var(--fw-text);
+	color: var(--fw-bg);
+	border: 2px solid var(--fw-border);
+	border-radius: 4px;
+	cursor: pointer;
+	transition: all 0.2s;
+	text-shadow: none;
 }
 
-.card:hover {
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+button:hover {
+	background: var(--fw-accent);
+	transform: translateY(-2px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Layout */
-#app {
-	min-height: 100vh;
-	background: var(--ac-bg);
+button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+	transform: none;
+}
+
+/* Utility Classes */
+.text-center {
+	text-align: center;
+}
+
+.mt-1 {
+	margin-top: 0.5rem;
+}
+.mt-2 {
+	margin-top: 1rem;
+}
+.mt-3 {
+	margin-top: 1.5rem;
+}
+.mt-4 {
+	margin-top: 2rem;
+}
+
+.mb-1 {
+	margin-bottom: 0.5rem;
+}
+.mb-2 {
+	margin-bottom: 1rem;
+}
+.mb-3 {
+	margin-bottom: 1.5rem;
+}
+.mb-4 {
+	margin-bottom: 2rem;
+}
+
+.p-1 {
+	padding: 0.5rem;
+}
+.p-2 {
+	padding: 1rem;
+}
+.p-3 {
+	padding: 1.5rem;
+}
+.p-4 {
+	padding: 2rem;
 }

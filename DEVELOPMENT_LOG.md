@@ -5348,3 +5348,36 @@ npm run lint
 **Total Remaining Work:** 6-9 hours
 
 ---
+
+### Base Repository Setup (Removed AC Theme) ✅ COMPLETED
+
+**Date**: 2025-10-25
+**Status**: COMPLETED - Base CVD testing framework without Animal Crossing theme
+
+This repository was split from the Animal Crossing-themed version to create a clean base framework. All AC-specific assets, styles, and components were removed while preserving the core color vision testing functionality.
+
+**Changes Made:**
+
+- ✅ Restored missing functional file: `src/utils/colorSimulation.js`
+- ✅ Replaced AC-themed `src/app.css` with clean framework styles
+- ✅ Removed AC texture references from CSS (dialogue boxes)
+- ✅ Removed empty AC route directory
+- ✅ Removed AC sprite import
+- ✅ Verified all framework files and imports are intact
+- ✅ Deleted old build artifacts with AC styles (`dist/`)
+
+**Styling:**
+
+- Base styles now use Average font (serif) instead of Nunito/Comic Sans
+- Clean white background with black text
+- Minimal, professional design without AC theming
+- Framework CSS variables: `--fw-bg`, `--fw-text`, `--fw-border`, etc.
+
+**Files Verified:**
+
+- All framework files in `src/lib/framework/` present and functional
+- All route pages in `src/routes/` working correctly
+- All imports resolve properly
+- Color simulation utilities complete
+
+---

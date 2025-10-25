@@ -9,6 +9,7 @@
  */
 
 import { calculateConfusionProbability } from './confusablePairFinder.js';
+import { deltaE } from './colorSpace.js';
 
 /**
  * Beta distribution parameters for modeling confusion probability
@@ -46,12 +47,13 @@ class BetaDistribution {
 	/**
 	 * Update distribution with new observation
 	 * @param {boolean} success - True if user distinguished colors, false if confused
+	 * @param {number} weight - Update strength (default 1.0), scales with color distance
 	 */
-	update(success) {
+	update(success, weight = 1.0) {
 		if (success) {
-			this.alpha += 1; // User distinguished = evidence against confusion
+			this.alpha += weight; // User distinguished = evidence against confusion
 		} else {
-			this.beta += 1; // User confused = evidence for confusion
+			this.beta += weight; // User confused = evidence for confusion
 		}
 	}
 
@@ -115,6 +117,46 @@ export class BayesianColorVisionModel {
 	}
 
 	/**
+	 * Calculate evidence weight based on perceptual color distance (Delta E)
+	 *
+	 * Principle: Larger perceptual distances provide stronger evidence about confusion ability
+	 *
+	 * Rationale from psychometric testing research:
+	 * - Confusing very similar colors (ΔE < 2): Reduced information, weight ~0.77-0.81
+	 *   (might be screen/lighting artifacts, measurement noise - 21% reduction)
+	 * - Confusing moderately different colors (ΔE 2-10): Standard information, weight ~0.81-1.0
+	 *   (JND to perceptible range, good discrimination tests)
+	 * - Confusing clearly different colors (ΔE 10-30): High information, weight ~1.0-1.38
+	 *   (strong evidence of true confusion patterns - up to 38% increase)
+	 * - Confusing very different colors (ΔE > 30): Capped at 1.0
+	 *   (less informative beyond this range, outcome becomes obvious)
+	 *
+	 * Uses sigmoid-based weighting (k=0.1) centered around ΔE=10 (optimal discrimination range)
+	 * Conservative approach: 1.8x ratio between min (0.77) and max (1.38) weights
+	 *
+	 * @param {number} deltaEValue - Perceptual color distance (CIEDE2000)
+	 * @returns {number} Evidence weight factor (0.77-1.38, capped at 1.0 for ΔE>30)
+	 */
+	calculateEvidenceWeight(deltaEValue) {
+		const minWeight = 0.5; // Minimum weight for very similar colors (ΔE < 2)
+		const maxWeight = 1.5; // Maximum weight for moderate differences (ΔE 10-30)
+		const center = 10; // Sigmoid center point (optimal discrimination range)
+		const k = 0.1; // Steepness parameter (how quickly weight increases)
+
+		// Sigmoid formula: weight = min + (max - min) * sigmoid(deltaE)
+		const sigmoid = 1 / (1 + Math.exp(-k * (deltaEValue - center)));
+		let weight = minWeight + (maxWeight - minWeight) * sigmoid;
+
+		// Cap weight at 1.0 for very large ΔE (> 30)
+		// Beyond this range, differences become obvious and less informative
+		if (deltaEValue > 30) {
+			weight = Math.min(weight, 1.0);
+		}
+
+		return weight;
+	}
+
+	/**
 	 * Update beliefs based on user response
 	 * @param {Object} trial - Trial data
 	 * @param {string} userResponse - 'same' | 'color1' | 'color2'
@@ -132,11 +174,24 @@ export class BayesianColorVisionModel {
 			identifiedCorrectly = userResponse === trial.referencePosition;
 		}
 
-		// Update belief for this color pair
-		const belief = this.getBeliefForPair(color1, color2);
-		belief.update(userDistinguished);
+		// Calculate Delta E perceptual distance between colors
+		const deltaEValue = deltaE(color1, color2);
 
-		// Record in history
+		// Calculate evidence weight based on perceptual distance
+		const weight = this.calculateEvidenceWeight(deltaEValue);
+
+		// Update belief with distance-weighted evidence
+		const belief = this.getBeliefForPair(color1, color2);
+		belief.update(userDistinguished, weight);
+
+		// Console logging for debugging and validation
+		console.log(`[Bayesian Update] Test: ${color1} vs ${color2}`);
+		console.log(`  ΔE (CIEDE2000): ${deltaEValue.toFixed(2)}`);
+		console.log(`  Evidence Weight: ${weight.toFixed(3)}`);
+		console.log(`  User Response: ${userDistinguished ? 'Distinguished' : 'Confused'}`);
+		console.log(`  New Confusion Prob: ${(1 - belief.getMean()).toFixed(3)}`);
+
+		// Record in history with Delta E and weight data
 		this.testHistory.push({
 			color1,
 			color2,
@@ -144,6 +199,8 @@ export class BayesianColorVisionModel {
 			userResponse,
 			userDistinguished,
 			identifiedCorrectly,
+			deltaE: deltaEValue,
+			updateWeight: weight,
 			timestamp: Date.now(),
 			beliefAfter: belief.getMean()
 		});

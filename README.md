@@ -5,6 +5,7 @@ A modern web application for testing color vision deficiency (CVD) using adaptiv
 ## Features
 
 ### User Features
+
 - **9 CVD Types Supported**: deuteranomaly, protanomaly, tritanomaly, deuteranopia, protanopia, tritanopia, achromatomaly, achromatopsia, normal vision
 - **Multi-Stage Calibration**: Tests all confusion points per CVD type (2-5 stages)
 - **Adaptive Testing**: Bayesian inference with information gain optimization
@@ -14,6 +15,7 @@ A modern web application for testing color vision deficiency (CVD) using adaptiv
 - **Manual Settings**: Override severity with known diagnosis values
 
 ### Developer Features
+
 - **Bayesian Adaptive Engine**: Beta distributions with entropy-based selection
 - **Simulation-Based Testing**: Uses `color-blind` library for research-backed priors
 - **Hotspot Detection**: Dynamically focuses on problem areas after 30+ tests
@@ -32,6 +34,7 @@ A modern web application for testing color vision deficiency (CVD) using adaptiv
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js 18+
 - PocketBase instance
 
@@ -53,6 +56,7 @@ npm run dev
 See [POCKETBASE_SCHEMA.md](POCKETBASE_SCHEMA.md) for complete schema documentation.
 
 Required collections:
+
 - `colorvision_users` - User profiles with CVD type and severity
 - `colorvision_tests` - Individual test results
 - `colorvision_settings` - User settings and Bayesian state
@@ -83,24 +87,29 @@ src/
 ## Key Components
 
 ### Multi-Stage Calibration
+
 Tests all confusion points per CVD type:
+
 - Deuteranomaly: 5 stages (reds/greens, blue-greens/grays, pinks/grays, purples/blues, browns/oranges)
 - Achromatopsia: 2 stages (grayscale, brightness)
 - Others: 4-5 stages each
 
 ### Bayesian Adaptive Testing
+
 - Starts with simulation-based priors
 - Updates beliefs based on user responses
 - Selects next test using information gain
 - Balances exploration (30%) vs exploitation (70%)
 
 ### Severity Inference
+
 - Requires 50+ tests for accuracy
 - Compares observed vs expected confusion
 - Updates every 10 tests automatically
 - Saves to user profile
 
 ### Hotspot Detection
+
 - Identifies high-confusion color regions
 - Dynamically adapts test selection
 - Activates after 30+ tests
@@ -163,12 +172,35 @@ This implementation was informed by three excellent open-source projects:
    - Online testing tools and simulations
    - Community-validated testing approaches
 
+4. **[Color Oracle](https://github.com/nvkelso/color-oracle)** by nvkelso
+   - Design and accessibility inspiration
+
+5. **[color-diff](https://github.com/markusn/color-diff)** by markusn
+   - CIEDE2000 Delta E implementation for perceptual color distance
+   - Used for evidence weighting in Bayesian adaptive algorithm
+   - BSD-3-Clause license
+
 ### Key Research Papers
 
-- Machado, G.M., Oliveira, M.M., Fernandes, L.A.F. (2009). "A Physiologically-based Model for Simulation of Color Vision Deficiency"
-- Farnsworth, D. (1943). "The Farnsworth-Munsell 100-Hue and Dichotomous Tests for Color Vision"
-- Bayesian adaptive testing methodology from psychometric testing literature
+**Color Vision Deficiency Simulation:**
 
+- Machado, G.M., Oliveira, M.M., Fernandes, L.A.F. (2009). "A Physiologically-based Model for Simulation of Color Vision Deficiency"
+
+**Clinical Testing Methods:**
+
+- Farnsworth, D. (1943). "The Farnsworth-Munsell 100-Hue and Dichotomous Tests for Color Vision"
+- Ishihara, S. (1917). "Tests for colour-blindness"
+
+**Perceptual Color Distance:**
+
+- CIE (2001). "Industrial Colour-Difference Evaluation." CIE Technical Report 142-2001 (CIEDE2000)
+- Sharma, G., Wu, W., & Dalal, E. N. (2005). "The CIEDE2000 color-difference formula"
+
+**Bayesian Adaptive Testing:**
+
+- Watson, A. B. (2017). "QUEST+: A general multidimensional Bayesian adaptive psychometric method"
+- Watson, A. B., & Pelli, D. G. (1983). "QUEST: A Bayesian adaptive psychometric method"
+- Kontsevich, L. L., & Tyler, C. W. (1999). "Bayesian adaptive estimation of psychometric slope and threshold"
 
 ## Credits
 

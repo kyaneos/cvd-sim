@@ -49,8 +49,7 @@
 						confusion patterns
 					</li>
 					<li>
-						<strong>Results:</strong> Complete test history with searchable, filterable records and
-						statistics
+						<strong>Results:</strong> Complete test history with searchable, filterable records and statistics
 					</li>
 					<li>
 						<strong>Color Map:</strong> Circular visualization showing your personal color confusion
@@ -60,8 +59,8 @@
 						<strong>Settings:</strong> Configure CVD type, severity, and run multi-stage calibration
 					</li>
 					<li>
-						<strong>Converter:</strong> Transform images to show how they appear with your specific
-						color vision profile
+						<strong>Converter:</strong> Transform images to show how they appear with your specific color
+						vision profile
 					</li>
 					<li>
 						<strong>Hex Navigator:</strong> Explore and compare specific colors with CVD simulation
@@ -83,8 +82,10 @@
 				<p>This implementation was informed by excellent open-source projects:</p>
 				<ul>
 					<li>
-						<a href="https://github.com/MaPePeR/jsColorblindSimulator" target="_blank" rel="noopener"
-							>jsColorblindSimulator</a
+						<a
+							href="https://github.com/MaPePeR/jsColorblindSimulator"
+							target="_blank"
+							rel="noopener">jsColorblindSimulator</a
 						> by MaPePeR - Machado et al. physiologically-accurate CVD simulation
 					</li>
 					<li>
@@ -101,6 +102,11 @@
 							>Color Oracle</a
 						> by nvkelso - Design and accessibility inspiration
 					</li>
+					<li>
+						<a href="https://github.com/markusn/color-diff" target="_blank" rel="noopener"
+							>color-diff</a
+						> by markusn - CIEDE2000 Delta E implementation for perceptual distance weighting
+					</li>
 				</ul>
 			</div>
 
@@ -108,14 +114,21 @@
 				<h3>Key Research</h3>
 				<ul>
 					<li>
-						Machado, G.M., Oliveira, M.M., Fernandes, L.A.F. (2009). "A Physiologically-based Model
-						for Simulation of Color Vision Deficiency"
+						<strong>CVD Simulation:</strong> Machado et al. (2009) "A Physiologically-based Model for
+						Simulation of Color Vision Deficiency"
 					</li>
 					<li>
-						Farnsworth, D. (1943). "The Farnsworth-Munsell 100-Hue and Dichotomous Tests for Color
-						Vision"
+						<strong>Clinical Testing:</strong> Farnsworth (1943) "The Farnsworth-Munsell 100-Hue and
+						Dichotomous Tests"; Ishihara (1917) "Tests for colour-blindness"
 					</li>
-					<li>Bayesian adaptive testing methodology from psychometric testing literature</li>
+					<li>
+						<strong>Perceptual Distance:</strong> CIE (2001) CIEDE2000 formula; Sharma et al. (2005)
+						implementation notes
+					</li>
+					<li>
+						<strong>Bayesian Adaptive Testing:</strong> Watson (2017) QUEST+; Watson & Pelli (1983) QUEST;
+						Kontsevich & Tyler (1999) psychometric slope estimation
+					</li>
 				</ul>
 			</div>
 

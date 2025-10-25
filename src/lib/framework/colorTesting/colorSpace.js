@@ -2,6 +2,8 @@
  * Color space utilities for hex/RGB conversions and distance calculations
  */
 
+import * as colorDiff from 'color-diff';
+
 /**
  * Convert hex color to RGB object
  * @param {string} hex - Hex color (e.g. '#FF5733' or 'FF5733')
@@ -49,18 +51,33 @@ export function rgbDistance(color1, color2) {
 }
 
 /**
- * Calculate perceptual color difference using Delta E (CIE76 approximation)
+ * Calculate perceptual color difference using Delta E CIEDE2000
  * More accurate than simple RGB distance for human color perception
- * @param {string} hex1
- * @param {string} hex2
- * @returns {number} Delta E value
+ *
+ * Uses the CIEDE2000 formula (CIE 2001), which is the current industry standard
+ * for perceptual color difference measurement.
+ *
+ * Interpretation thresholds:
+ * - ΔE < 1.0: Imperceptible difference (colors appear identical)
+ * - ΔE 1.0-2.0: Just Noticeable Difference (JND) - perceptible through close observation
+ * - ΔE 2.0-10.0: Clearly perceptible at a glance
+ * - ΔE 10.0-30.0: Moderate to large difference
+ * - ΔE > 30.0: Very large difference (approaching opposite colors)
+ *
+ * @param {string} hex1 - First color (e.g. '#FF5733')
+ * @param {string} hex2 - Second color (e.g. '#00FF00')
+ * @returns {number} Delta E CIEDE2000 value
  */
 export function deltaE(hex1, hex2) {
 	const rgb1 = hexToRgb(hex1);
 	const rgb2 = hexToRgb(hex2);
 
-	// Simple RGB distance (good enough for now, can upgrade to Lab later)
-	return rgbDistance(rgb1, rgb2);
+	// Convert to color-diff format (R, G, B properties)
+	const color1 = { R: rgb1.r, G: rgb1.g, B: rgb1.b };
+	const color2 = { R: rgb2.r, G: rgb2.g, B: rgb2.b };
+
+	// Use CIEDE2000 formula (most accurate perceptual distance)
+	return colorDiff.diff(color1, color2);
 }
 
 /**

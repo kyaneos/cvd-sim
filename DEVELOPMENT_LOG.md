@@ -5381,3 +5381,190 @@ This repository was split from the Animal Crossing-themed version to create a cl
 - Color simulation utilities complete
 
 ---
+
+### Delta E Perceptual Distance Weighting ✅ COMPLETED
+
+**Date**: 2025-10-25
+**Status**: COMPLETED - Added CIEDE2000-based evidence weighting to Bayesian inference
+
+**Objective:**
+Implement perceptual color distance (Delta E CIEDE2000) weighting in the Bayesian adaptive testing algorithm, so that tests comparing perceptually distant colors provide stronger evidence than tests comparing very similar colors.
+
+**Research Foundation:**
+
+Research into psychometric adaptive testing and color perception reveals:
+
+1. **Delta E Standards** (from Color Difference literature):
+   - ΔE < 1: Imperceptible difference
+   - ΔE 1-2: Just noticeable difference (JND)
+   - ΔE 2-10: Clearly perceptible at a glance
+   - ΔE 10-30: Moderate to large perceptual difference
+   - ΔE > 30: Very large difference (obviously distinct colors)
+
+2. **Adaptive Testing Principles** (from psychometric CAT/IRT literature):
+   - Test informativeness depends on stimulus discriminability
+   - Very similar stimuli (low ΔE): Low information, potentially noisy
+   - Moderate distance stimuli (medium ΔE): High information, optimal for discrimination
+   - Very different stimuli (high ΔE): Lower information, outcome is obvious
+
+3. **Evidence Weighting Rationale**:
+   - Confusing colors with ΔE < 2 (very similar): Low evidence weight (~0.5) - might be screen/lighting artifacts
+   - Confusing colors with ΔE 2-10 (JND to perceptible): Standard weight (~1.0) - good discrimination test
+   - Confusing colors with ΔE 10-30 (clearly different): High weight (~1.5) - strong evidence of true confusion
+   - Confusing colors with ΔE > 30 (very different): Standard weight (~1.0) - less informative beyond this range
+
+**Implementation Plan:**
+
+**Phase 1: Install CIEDE2000 Library**
+
+- Add npm package: `color-diff` (industry-standard JavaScript implementation)
+- Library provides RGB → LAB conversion and CIEDE2000 calculation
+- 47+ npm dependents, BSD-3-Clause license, well-maintained
+
+**Phase 2: Update colorSpace.js**
+
+- Import `color-diff` library functions
+- Replace existing `deltaE()` function implementation
+- Use proper CIEDE2000 formula instead of simple RGB Euclidean distance
+- Keep function signature unchanged for backward compatibility
+- Add JSDoc documentation explaining Delta E interpretation
+
+**Phase 3: Update bayesianInference.js**
+
+**3a. Modify BetaDistribution class:**
+
+```javascript
+// In BetaDistribution.update() method:
+update(success, weight = 1.0) {
+  if (success) {
+    this.alpha += weight;  // Previously: this.alpha += 1
+  } else {
+    this.beta += weight;   // Previously: this.beta += 1
+  }
+}
+```
+
+**3b. Add calculateEvidenceWeight() method to BayesianColorVisionModel:**
+
+```javascript
+calculateEvidenceWeight(deltaE) {
+  // Sigmoid-based weighting function
+  // Center around ΔE=10 (optimal discrimination range)
+  // Range: 0.5 (low evidence) to 1.5 (high evidence)
+
+  const minWeight = 0.5;   // For very similar colors (ΔE < 2)
+  const maxWeight = 1.5;   // For moderate differences (ΔE 10-30)
+  const center = 10;       // Sigmoid center point
+  const k = 0.1;           // Steepness
+
+  // Sigmoid formula: weight = min + (max - min) * sigmoid(deltaE)
+  const sigmoid = 1 / (1 + Math.exp(-k * (deltaE - center)));
+  let weight = minWeight + (maxWeight - minWeight) * sigmoid;
+
+  // Cap at max weight for very large ΔE (> 30)
+  if (deltaE > 30) {
+    weight = Math.min(weight, 1.0);
+  }
+
+  return weight;
+}
+```
+
+**3c. Modify updateFromResponse() method:**
+
+```javascript
+updateFromResponse(trial, userResponse) {
+  // ... existing logic ...
+
+  // NEW: Calculate Delta E perceptual distance
+  const deltaEValue = deltaE(color1, color2);
+  const weight = this.calculateEvidenceWeight(deltaEValue);
+
+  // Update with weighted evidence (instead of uniform +1)
+  const belief = this.getBeliefForPair(color1, color2);
+  belief.update(userDistinguished, weight);
+
+  // NEW: Store Delta E and weight in history
+  this.testHistory.push({
+    color1,
+    color2,
+    // ... existing fields ...
+    deltaE: deltaEValue,
+    updateWeight: weight,
+    // ... rest ...
+  });
+
+  // NEW: Console logging for debugging
+  console.log(`Test: ${color1} vs ${color2}`);
+  console.log(`  ΔE: ${deltaEValue.toFixed(2)}`);
+  console.log(`  Weight: ${weight.toFixed(3)}`);
+  console.log(`  Result: ${userDistinguished ? 'Distinguished' : 'Confused'}`);
+}
+```
+
+**Phase 4: Testing & Validation**
+
+- Test with various color pairs to verify Delta E calculations
+- Monitor console logs during testing to validate weighting
+- Verify that learning rates are appropriate (not too fast/slow)
+- Compare confusion probabilities with and without weighting
+
+**Expected Impact:**
+
+1. **More accurate personalized color maps:**
+   - Tests with high discriminability (ΔE 10-30) have stronger influence
+   - Noisy tests (ΔE < 2) have reduced influence
+   - Learning focuses on informative color pairs
+
+2. **Faster convergence:**
+   - Informative tests contribute more to belief updates
+   - Fewer tests needed to reach confident conclusions
+
+3. **Better severity estimation:**
+   - Weighted evidence provides clearer signal about true confusion patterns
+   - Less affected by edge cases or measurement noise
+
+**Files to Modify:**
+
+- `package.json` - Add `color-diff` dependency
+- `src/lib/framework/colorTesting/colorSpace.js` - Upgrade deltaE() to CIEDE2000
+- `src/lib/framework/colorTesting/bayesianInference.js` - Add weighting logic
+- `DEVELOPMENT_LOG.md` - Document implementation (this section)
+- `COLOR_VISION_TESTING_RESEARCH.md` - Add Delta E research section
+- `README.md` - Credit CIEDE2000 implementation
+- `src/routes/+layout.svelte` - Update info modal with color-diff credit
+
+**Research Sources to Credit:**
+
+- CIE (International Commission on Illumination) - CIEDE2000 formula
+- `color-diff` npm library by markusn (BSD-3-Clause license)
+- Color difference research literature (Wikipedia, ColorAide, Delta E 101)
+- Bayesian adaptive psychometric testing papers (QUEST+, IRT literature)
+
+**Implementation Completed:**
+
+1. ✅ Installed `color-diff` npm package (v1.4.0)
+2. ✅ Updated colorSpace.js deltaE() to use CIEDE2000 via color-diff library
+3. ✅ Added calculateEvidenceWeight() method to BayesianColorVisionModel (sigmoid function, 0.5-1.5 range, centered at ΔE=10)
+4. ✅ Modified updateFromResponse() to calculate Delta E and apply weighted updates
+5. ✅ Added console logging for debugging (Delta E, weight, confusion probability)
+6. ✅ Stored deltaE and updateWeight in testHistory for analysis
+7. ✅ Updated all documentation (README, COLOR_VISION_TESTING_RESEARCH, info modal)
+8. ✅ Ran `npm run format` and `npm run lint` - formatting passed, pre-existing lint errors unrelated
+
+**Expected Impact:**
+
+- Tests with perceptually distant colors (ΔE 10-30) now provide stronger evidence (weight ~1.0-1.38, up to 38% increase)
+- Tests with very similar colors (ΔE < 2) provide weaker evidence (weight ~0.77-0.81, 21% reduction) to reduce noise
+- Conservative sigmoid approach (k=0.1) with 1.8x ratio between min and max weights
+- Console logs show real-time Delta E values and update weights for validation
+- testHistory tracks all data for future analysis and algorithm tuning
+
+**Testing Instructions:**
+
+1. Run the app: `npm run dev`
+2. Complete color vision tests
+3. Check browser console for Bayesian Update logs showing Delta E and weights
+4. Verify that different color pairs receive appropriate evidence weights
+
+---

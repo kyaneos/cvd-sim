@@ -58,15 +58,28 @@
 			</div>
 
 			<div class="nav-tabs">
-				<a href="{base}/dashboard/test" class:active={currentPath.endsWith('/dashboard/test')}> Test </a>
-				<a href="{base}/dashboard/results" class:active={currentPath.endsWith('/dashboard/results')}>
+				<a href="{base}/dashboard/test" class:active={currentPath.endsWith('/dashboard/test')}>
+					Test
+				</a>
+				<a
+					href="{base}/dashboard/results"
+					class:active={currentPath.endsWith('/dashboard/results')}
+				>
 					Results
 				</a>
-				<a href="{base}/dashboard/hex" class:active={currentPath.endsWith('/dashboard/hex')}> Color Map </a>
-				<a href="{base}/dashboard/converter" class:active={currentPath.endsWith('/dashboard/converter')}>
+				<a href="{base}/dashboard/hex" class:active={currentPath.endsWith('/dashboard/hex')}>
+					Color Map
+				</a>
+				<a
+					href="{base}/dashboard/converter"
+					class:active={currentPath.endsWith('/dashboard/converter')}
+				>
 					Converter
 				</a>
-				<a href="{base}/dashboard/settings" class:active={currentPath.endsWith('/dashboard/settings')}>
+				<a
+					href="{base}/dashboard/settings"
+					class:active={currentPath.endsWith('/dashboard/settings')}
+				>
 					Settings
 				</a>
 				<button class="logout-btn" onclick={handleLogout}> Logout </button>

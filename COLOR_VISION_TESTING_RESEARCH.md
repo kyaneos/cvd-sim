@@ -399,3 +399,48 @@ This documentation is maintained for:
 
 - CIE (1931). "CIE 1931 color space"
 - MacAdam, D. L. (1942). "Visual sensitivities to color differences in daylight"
+
+### Delta E and Perceptual Color Distance
+
+- CIE (1976). "Guidelines for coordinated research work on color-difference evaluation." CIE Publication No. 15.2
+  - Original CIE76 Delta E formula (ΔE\*ab)
+- CIE (2001). "Industrial Colour-Difference Evaluation." CIE Technical Report 142-2001
+  - CIEDE2000 formula specification (ΔE00)
+  - Current industry standard for perceptual color difference
+- Sharma, G., Wu, W., & Dalal, E. N. (2005). "The CIEDE2000 color-difference formula: Implementation notes, supplementary test data, and mathematical observations." Color Research & Application, 30(1), 21-30
+  - Practical implementation guidance for CIEDE2000
+  - Test data and validation
+- Mokrzycki, W., & Tatol, M. (2011). "Color difference Delta E - A survey." Machine Graphics and Vision, 20(4), 383-411
+  - Comprehensive survey of Delta E formulas
+  - Comparison of CIE76, CIE94, and CIEDE2000
+
+### Bayesian Adaptive Psychometric Testing
+
+- Watson, A. B. (2017). "QUEST+: A general multidimensional Bayesian adaptive psychometric method." Journal of Vision, 17(3):10. doi: 10.1167/17.3.10
+  - Modern extension of QUEST for multiple dimensions
+  - Information-theoretic optimal test selection
+  - Applicable to color discrimination testing
+- Watson, A. B., & Pelli, D. G. (1983). "QUEST: A Bayesian adaptive psychometric method." Perception & Psychophysics, 33(2), 113-120. doi: 10.3758/BF03202828
+  - Foundation of Bayesian adaptive threshold estimation
+  - Widely used in vision science research
+- Kontsevich, L. L., & Tyler, C. W. (1999). "Bayesian adaptive estimation of psychometric slope and threshold." Vision Research, 39(16), 2729-2737. doi: 10.1016/s0042-6989(98)00285-5
+  - Two-dimensional Bayesian parameter estimation
+  - Maximum expected information gain criterion
+  - Used in adaptive discrimination testing
+- Lord, F. M. (1980). "Applications of Item Response Theory to Practical Testing Problems." Hillsdale, NJ: Lawrence Erlbaum Associates
+  - Item Response Theory foundations
+  - Computerized Adaptive Testing (CAT) methodology
+  - Test informativeness and difficulty scaling
+
+### Software Implementation
+
+- markusn/color-diff: JavaScript implementation of CIEDE2000
+  - npm package: `color-diff`
+  - License: BSD-3-Clause
+  - Repository: https://github.com/markusn/color-diff
+  - Features: RGB ↔ LAB conversion, multiple Delta E formulas
+- MaPePeR/jsColorblindSimulator: Machado algorithm implementation
+  - Repository: https://github.com/MaPePeR/jsColorblindSimulator
+- skratchdot/color-blind: Matthew Wickline/HCIRN algorithms
+  - npm package: `color-blind`
+  - Repository: https://github.com/skratchdot/color-blind

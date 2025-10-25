@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 	import { frameworkAuthStore } from '$lib/framework/stores/frameworkAuthStore.js';
 
 	let isChecking = true;
@@ -9,7 +10,7 @@
 		// Check if user is already logged in
 		const unsubscribe = frameworkAuthStore.subscribe((state) => {
 			if (state.isAuthenticated) {
-				goto('/dashboard/test');
+				goto(`${base}/dashboard/test`);
 			} else {
 				isChecking = false;
 			}
@@ -19,11 +20,11 @@
 	});
 
 	function handleLogin() {
-		goto('/auth/login');
+		goto(`${base}/auth/login`);
 	}
 
 	function handleRegister() {
-		goto('/auth/register');
+		goto(`${base}/auth/register`);
 	}
 </script>
 

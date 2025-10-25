@@ -2,13 +2,14 @@
 	import { frameworkAuthStore } from '$lib/framework/stores/frameworkAuthStore.js';
 	import { goto, beforeNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { base } from '$app/paths';
 
 	let auth = $derived($frameworkAuthStore);
 
 	// Auth guard - redirect to login if not authenticated
 	$effect(() => {
 		if (!auth.isAuthenticated) {
-			goto('/auth/login');
+			goto(`${base}/auth/login`);
 		}
 	});
 
@@ -19,8 +20,8 @@
 		// Only block if leaving the test page with an active test
 		if (
 			activeTest === 'true' &&
-			from?.url.pathname === '/dashboard/test' &&
-			to?.url.pathname !== '/dashboard/test'
+			from?.url.pathname.endsWith('/dashboard/test') &&
+			!to?.url.pathname.endsWith('/dashboard/test')
 		) {
 			const confirmLeave = confirm(
 				'You have an active test session. Your progress is saved, but you should end the test properly.\n\nDo you want to leave anyway?'
@@ -37,7 +38,7 @@
 
 	async function handleLogout() {
 		await frameworkAuthStore.logout();
-		goto('/auth/login');
+		goto(`${base}/auth/login`);
 	}
 
 	let currentPath = $derived($page.url.pathname);
@@ -57,15 +58,15 @@
 			</div>
 
 			<div class="nav-tabs">
-				<a href="/dashboard/test" class:active={currentPath === '/dashboard/test'}> Test </a>
-				<a href="/dashboard/results" class:active={currentPath === '/dashboard/results'}>
+				<a href="{base}/dashboard/test" class:active={currentPath.endsWith('/dashboard/test')}> Test </a>
+				<a href="{base}/dashboard/results" class:active={currentPath.endsWith('/dashboard/results')}>
 					Results
 				</a>
-				<a href="/dashboard/hex" class:active={currentPath === '/dashboard/hex'}> Color Map </a>
-				<a href="/dashboard/converter" class:active={currentPath === '/dashboard/converter'}>
+				<a href="{base}/dashboard/hex" class:active={currentPath.endsWith('/dashboard/hex')}> Color Map </a>
+				<a href="{base}/dashboard/converter" class:active={currentPath.endsWith('/dashboard/converter')}>
 					Converter
 				</a>
-				<a href="/dashboard/settings" class:active={currentPath === '/dashboard/settings'}>
+				<a href="{base}/dashboard/settings" class:active={currentPath.endsWith('/dashboard/settings')}>
 					Settings
 				</a>
 				<button class="logout-btn" onclick={handleLogout}> Logout </button>

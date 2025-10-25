@@ -3,6 +3,7 @@
 	import { frameworkAuthStore } from '$lib/framework/stores/frameworkAuthStore.js';
 	import ColorMapVisualization from '$lib/framework/components/ColorMapVisualization.svelte';
 	import { BayesianColorVisionModel } from '$lib/framework/colorTesting/bayesianInference.js';
+	import { base } from '$app/paths';
 	import pb from '$lib/pocketbase.js';
 
 	let auth = $derived($frameworkAuthStore);
@@ -358,7 +359,7 @@
 		<div class="empty-state">
 			<h2>No tests completed yet</h2>
 			<p>Head to the Test tab to start building your color vision map!</p>
-			<a href="/dashboard/test" class="cta-btn">Start Testing</a>
+			<a href="{base}/dashboard/test" class="cta-btn">Start Testing</a>
 		</div>
 	{:else}
 		<div class="stats-grid">

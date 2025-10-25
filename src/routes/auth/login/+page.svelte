@@ -1,6 +1,7 @@
 <script>
 	import { frameworkAuthStore } from '$lib/framework/stores/frameworkAuthStore.js';
 	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 
 	let email = $state('');
 	let password = $state('');
@@ -12,7 +13,7 @@
 		error = '';
 		try {
 			await frameworkAuthStore.login(email, password);
-			goto('/dashboard/test');
+			goto(`${base}/dashboard/test`);
 		} catch (e) {
 			error = e.message || 'Login failed';
 		} finally {
@@ -49,7 +50,7 @@
 	</form>
 
 	<p class="link-text">
-		Don't have an account? <a href="/auth/register">Register</a>
+		Don't have an account? <a href="{base}/auth/register">Register</a>
 	</p>
 </div>
 

@@ -4,6 +4,7 @@
 	import SeverityCalibration from '$lib/framework/components/SeverityCalibration.svelte';
 	import { frameworkAuthStore } from '$lib/framework/stores/frameworkAuthStore.js';
 	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 	import pb from '$lib/pocketbase.js';
 
 	let auth = $derived($frameworkAuthStore);
@@ -25,7 +26,7 @@
 		console.log('Test session completed:', stats);
 		// Clear active session flag
 		localStorage.removeItem('activeTestSession');
-		goto('/dashboard/results');
+		goto(`${base}/dashboard/results`);
 	}
 
 	async function handleCalibrationComplete(severity) {
